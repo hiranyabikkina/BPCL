@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.BottleInspectionMapper">
+
+	<insert id="insert" parameterType="com.bpcl.dto.BottleInspection">
+		INSERT INTO
+		bottle_inspection
+		(uuid,bottle_code,plant_location,line_uuid,creator,created_time,status)
+		VALUES
+		(#{uuid},#{bottleCode},#{plantLocation},#{lineUuid},#{creator},#{createdTime},#{status})
+	</insert>
+
+	<select id="getInfoByMap" resultType="com.bpcl.dto.BottleInspection">
+		SELECT
+		*
+		<include refid="sqlForList" />
+	</select>
+
+	<update id="update" parameterType="com.bpcl.dto.BottleInspection">
+		UPDATE bottle_inspection
+		<set>
+			<if test="bottleCode != null">bottle_code = #{bottleCode},</if>
+			<if test="plantLocation != null">plant_location = #{plantLocation},</if>
+			<if test="lineUuid != null">line_uuid = #{lineUuid},</if>
+			<if test="creator != null">creator = #{creator},</if>
+			<if test="createdTime != null">created_time = #{createdTime},</if>
+			<if test="status != null">status = #{status},</if>
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+
+	<!-- Query (query according to primary key ID） -->
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.BottleInspection">
+		SELECT
+		*
+		FROM bottle_inspection
+		WHERE uuid = #{uuid}
+	</select>
+
+	<sql id="sqlForList">
+		FROM bottle_inspection
+		<where>
+		<if test="bottleCode != null">and bottle_code = #{bottleCode}</if>
+			<if test="plantLocation != null">and plant_location = #{plantLocation}</if>
+			<if test="lineUuid != null">and line_uuid = #{lineUuid}</if>
+			<if test="creator != null">and creator = #{creator}</if>
+			<if test="createdTime != null">and created_time = #{createdTime}</if>
+			<if test="status != null">and status = #{status}</if>
+		</where>
+	</sql>
+
+</mapper> 
