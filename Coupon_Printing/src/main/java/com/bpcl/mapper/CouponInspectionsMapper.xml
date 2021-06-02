@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.CouponInspectionsMapper">
+
+
+	<!-- Add to -->
+	<insert id="insert"
+		parameterType="com.bpcl.dto.CouponInspections" useGeneratedKeys="true"
+		keyProperty="uuid">
+		INSERT INTO coupon_inspections
+
+		(uuid,plant_location_code,coupon_code,coupon_size,lot_code,status)
+		VALUES
+		(#{uuid},#{plantLocationCode},#{couponCode},#{couponSize},#{lotCode},#{status})
+	</insert>
+
+	<!--Modification -->
+	<update id="update"
+		parameterType="com.bpcl.dto.CouponInspections">
+		UPDATE coupon_inspections
+
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="plantLocationCode != null">plant_location_code = #{plantLocationCode},</if>
+			<if test="couponCode != null">coupon_code= #{couponCode},</if>
+			<if test="couponSize != null">coupon_size = #{couponSize},</if>
+			<if test="lotCode != null">lot_code = #{lotCode},</if>
+			<if test="status != null">status = #{status},</if>
+
+		</trim>
+		<where>
+			<if test="uuid != null">and uuid = #{uuid}</if>
+
+		</where>
+	</update>
+
+	<!-- Delete: Delete according to the primary key ID -->
+	<delete id="delete"
+		parameterType="com.bpcl.dto.CouponInspections">
+		DELETE FROM coupon_inspections
+
+		WHERE uuid = #{uuid}
+	</delete>
+
+	<!--Query (query based on primary key ID) -->
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.CouponInspections">
+		SELECT
+		*
+		FROM coupon_inspections
+
+		WHERE uuid = #{uuid}
+	</select>
+
+	<!--Query (according to map query) -->
+	<select id="getInfoByMap"
+		resultType="com.bpcl.dto.CouponInspections">
+		SELECT
+		*
+		<include refid="sqlForList" />
+		limit 1
+	</select>
+
+
+	<!--Get a list of generic SQL -->
+	<sql id="sqlForList">
+		FROM coupon_inspections
+
+		<where>
+			<if test="uuid != null">and uuid = #{uuid}</if>
+			<if test="plantLocationCode != null">and plant_location_code = #{plantLocationCode}</if>
+			<if test="couponCode != null">and coupon_code = #{couponCode}</if>
+			<if test="couponSize != null">and coupon_size = #{couponSize}</if>
+			<if test="lotCode != null">and lot_code = #{lotCode}</if>
+			<if test="status != null">and status = #{status}</if>
+
+		</where>
+	</sql>
+
+	<!--statistics -->
+	<select id="count" resultType="int">
+		select
+		count(*)
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- get list -->
+	<select id="query" resultType="com.bpcl.dto.CouponInspections">
+		select
+		*
+		<include refid="sqlForList" />
+
+	</select>
+
+	<!-- Paging query -->
+	<select id="queryPage"
+		resultType="com.bpcl.dto.CouponInspections">
+		select
+		*
+		<include refid="sqlForList" />
+
+	</select>
+
+
+	<!-- <update id="batchUpdateStatus"> <foreach collection="list" item="model" 
+		separator=";"> UPDATE Coupon_leaser_printing <trim prefix="SET" suffixOverrides=","> 
+		<if test="model.bottlingUnitUuid != null">bottling_unit_uuid = #{model.bottlingUnitUuid},</if> 
+		<if test="model.productionLineUuid != null">production_line_uuid= #{model.productionLineUuid},</if> 
+		<if test="model.couponId != null">coupon_id = #{model.couponId},</if> <if 
+		test="model.status != null">status = #{model.status},</if> </trim> where 
+		uuid = #{model.uuid} </foreach> </update> -->
+
+	<update id="batchUpdateStatus">
+		UPDATE coupon_inspections
+		SET
+		status = 1
+		<where>
+			status
+			= 0
+		</where>
+	</update>
+
+	<select id="getCountOfLotCode" resultType="int">
+		select
+		count(*) FROM coupon_inspections
+
+		<where>
+			<if test="lotCode == null">and lot_code is null</if>
+			<if test="state == null">and status =2</if>
+
+
+		</where>
+	</select>
+	<select id="getInfoByLotCode"
+		resultType="com.bpcl.dto.CouponInspections">
+		select
+		* FROM coupon_inspections
+
+		<where>
+			<if test="lotCode == null">and lot_code is null</if>
+			<if test="state == null">and status =2</if>
+		</where>
+
+	</select>
+
+
+	<select id="getByPrintingStatusChange"
+		resultType="com.bpcl.dto.CouponInspections">
+		SELECT coupon_code FROM `coupon_inspections` WHERE
+		coupon_code not in(#{pendingValues}) AND status=#{status} 
+		
+	</select>
+
+<delete id="deleteAll"
+		parameterType="com.bpcl.dto.CouponInspections">
+		DELETE FROM coupon_inspections
+
+		
+	</delete>
+
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.LineInformationMapper">
+
+	<insert id="insert" parameterType="com.bpcl.dto.LineInformation">
+		INSERT INTO
+		line_information
+		(uuid,loc_code,line_id,line_no,line_name,equipment_type,brand_oem_name,model_no,serial_no,mac_id,installation_date,ip_add,port_no,create_time)
+		VALUES
+		(#{uuid},#{locCode},#{lineId},#{lineNo},#{lineName},#{equipmentType},#{brandOemName},#{modelNo},
+		#{serialNo},#{macId},#{installationDate},#{ipAdd},#{portNo},#{createTime})
+
+	</insert>
+
+	<select id="getByMap" resultType="com.bpcl.dto.LineInformation"> SELECT 
+		* <include refid="sqlForList" /> </select>
+
+	
+	<update id="update" parameterType="com.bpcl.dto.LineInformation">
+		UPDATE line_information
+		<set>
+			<if test="locCode != null">loc_code = #{locCode},</if>
+			<if test="lineId != null">line_id = #{lineId},</if>
+			<if test="lineNo != null">line_no = #{lineNo},</if>
+			<if test="lineName != null">line_name = #{lineName},</if>
+			<if test="equipmentType != null">equipment_type = #{equipmentType},</if>
+			<if test="brandOemName != null">brand_oem_name = #{brandOemName},</if>
+			<if test="modelNo != null">model_no = #{modelNo},</if>
+			<if test="serialNo != null">serial_no = #{serialNo},</if>
+			<if test="macId != null">mac_id = #{macId},</if>
+			<if test="installationDate != null">installation_date = #{installationDate},</if>
+			<if test="ipAdd != null">ip_add = #{ipAdd},</if>
+			<if test="portNo != null">port_no = #{portNo},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+			
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+
+	
+	<delete id="delete" parameterType="com.bpcl.dto.LineInformation">
+		DELETE FROM line_information
+		WHERE uuid =#{uuid}
+	</delete>
+
+	
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.LineInformation">
+		SELECT * FROM
+		line_information WHERE uuid =#{uuid}
+	</select>
+
+	
+	<select id="getInfoByMap" resultType="com.bpcl.dto.LineInformation">
+		SELECT *
+		<include refid="sqlForList" />
+	</select>
+
+	
+	<sql id="sqlForList">
+	  FROM line_information
+		<where>
+		
+		<if test="locCode != null">and loc_code = #{locCode}</if>
+			<if test="lineId != null">and line_id = #{lineId}</if>
+			<if test="lineNo != null">and line_no = #{lineNo}</if>
+			<if test="lineName != null">and line_name = #{lineName}</if>			
+			<if test="equipmentType != null">and equipment_type = #{equipmentType}</if>
+			<if test="brandOemName != null">and brand_oem_name = #{brandOemName}</if>
+			<if test="modelNo != null">and model_no = #{modelNo}</if>
+			<if test="serialNo != null">and serial_no = #{serialNo}</if>
+			<if test="macId != null">and mac_id = #{macId}</if>
+			<if test="installationDate != null">and installation_date = #{installationDate}</if>
+			<if test="ipAdd != null">and ip_add = #{ipAdd}</if>
+			<if test="portNo != null">and port_no = #{portNo}</if>
+			<if test="createTime != null">and create_time = #{createTime}</if>		
+		</where>
+	</sql>
+
+	
+	<select id="count" resultType="int">
+		select count(*)
+		<include refid="sqlForList" />
+	</select>
+
+	<select id="query" resultType="com.bpcl.dto.LineInformation">
+		select *   
+		<include refid="sqlForList" />
+	</select>	
+	
+<select id="orderByCreateTime" resultType="com.bpcl.dto.LineInformation">
+			SELECT * FROM `line_information` order by `create_time` DESC limit 1
+	</select>	
+	
+</mapper> 

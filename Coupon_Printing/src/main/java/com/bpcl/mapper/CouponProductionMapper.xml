@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.CouponProductionMapper">
+	<insert id="insert" parameterType="com.bpcl.dto.CouponProduction">
+		INSERT INTO
+		coupon_production
+		(uuid,coupon_quantity,lot_code_quantity,coupon_size,create_time,status)
+		VALUES
+		(#{uuid},#{couponQuantity},#{lotCodeQuantity},#{couponSize},#{createTime},#{status})
+
+	</insert>
+
+	<select id="getByMap" resultType="com.bpcl.dto.CouponProduction"> SELECT 
+		* <include refid="sqlForList" /> </select>
+
+	
+	<update id="update" parameterType="com.bpcl.dto.CouponProduction">
+		UPDATE coupon_production
+		<set>
+			<if test="couponQuantity != null">coupon_quantity = #{couponQuantity},</if>
+			<if test="lotCodeQuantity != null">lot_code_quantity = #{lotCodeQuantity},</if>
+			<if test="couponSize != null">coupon_size = #{couponSize},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+			<if test="status != null">status = #{status},</if>
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+
+	
+	<delete id="delete" parameterType="com.bpcl.dto.CouponProduction">
+		DELETE FROM coupon_production
+		WHERE uuid =#{uuid}
+	</delete>
+
+	
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.CouponProduction">
+		SELECT * FROM
+		coupon_production WHERE uuid =#{uuid}
+	</select>
+
+	
+	<select id="getInfoByMap" resultType="com.bpcl.dto.CouponProduction">
+		SELECT *
+		<include refid="sqlForList" />
+	</select>
+
+	
+	<sql id="sqlForList">
+	  FROM coupon_production
+		<where>
+			<if test="couponQuantity != null">and coupon_quantity = #{couponQuantity}</if>
+			<if test="lotCodeQuantity != null">and lot_code_quantity = #{lotCodeQuantity}</if>
+			<if test="couponSize != null"> andcoupon_size = #{couponSize}</if>
+			<if test="createTime != null">and create_time = #{createTime}</if>
+			<if test="status != null">and status = #{status}</if>
+	</where>
+	</sql>
+
+	
+	<select id="count" resultType="int">
+		select count(*)
+		<include refid="sqlForList" />
+	</select>
+
+
+	<select id="query" resultType="com.bpcl.dto.CouponProduction">
+		select *   
+		<include refid="sqlForList" />
+	</select>
+
+	
+	<select id="queryPage" resultType="com.bpcl.dto.CouponProduction">
+		select *
+		<include refid="sqlForList" />
+	</select>
+	<select id="getByDesOrderDate" resultType="com.bpcl.dto.CouponProduction">
+		SELECT * FROM `coupon_production` order by `create_time` DESC limit 1
+	</select>
+	
+
+</mapper>

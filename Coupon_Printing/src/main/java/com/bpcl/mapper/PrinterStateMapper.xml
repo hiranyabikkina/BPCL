@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.PrinterStateMapper">
+
+	<insert id="insert" parameterType="com.bpcl.dto.PrinterState">
+		INSERT INTO
+		printer_status
+		(message,size,issued,print,inspect)
+		VALUES
+		(#{message},#{size},#{issued},#{print},#{inspect})
+	</insert>
+
+	<select id="getByMap" resultType="com.bpcl.dto.PrinterState">
+		SELECT
+		*
+		<include refid="sqlForList" />
+	</select>
+
+	<update id="update" parameterType="com.bpcl.dto.PrinterState">
+		UPDATE printer_status
+		<set>
+			<if test="message != null">message = #{message},</if>
+			<if test="size != null">size = #{size},</if>
+			<if test="issued != null">issued = #{issued},</if>
+			<if test="print != null">print = #{print},</if>
+			<if test="inspect != null">inspect = #{inspect},</if>
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+	
+	    <!-- Query (query according to primary key ID） -->
+    <select id="getInfoByUuid" resultType="com.bpcl.dto.PrinterState">
+        SELECT
+        *
+        FROM printer_status
+        WHERE uuid = #{uuid}
+    </select>
+
+	<sql id="sqlForList">
+		FROM printer_status
+		<where>
+			<if test="message != null">and message = #{message}</if>
+			<if test="size != null">and size = #{size}</if>
+			<if test="issued != null">and issued = #{issued}</if>
+			<if test="print != null">and print = #{print}</if>
+			<if test="inspect != null">and inspect = #{inspect}</if>
+		</where>
+	</sql>
+
+</mapper> 
