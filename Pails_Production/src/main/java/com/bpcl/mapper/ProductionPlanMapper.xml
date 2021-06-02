@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.ProductionPlanMapper">
+
+	<insert id="insert" parameterType="com.bpcl.dto.ProductionPlan">
+		INSERT INTO production_plan
+		(uuid,plan_id,loc_code,plant_location,line_uuid,plan_date,product_code,product_name,priority,pack_type,size_code,units_per_case,purpose,volume,mrp,mrp_batch,product_batch,is_coupon_apply,label_print,create_time,status)
+		VALUES
+		(#{uuid},#{planId},#{locCode},#{plantLocation},#{lineUuid},#{planDate},#{productCode},#{productName},#{priority},#{packType},#{sizeCode},#{unitsPerCase},#{purpose},#{volume},#{mrp},#{mrpBatch},#{productBatch},#{isCouponApply},#{labelPrint},#{createTime},#{status})
+
+	</insert>
+
+	<!--Modification -->
+	<update id="update" parameterType="com.bpcl.dto.ProductionPlan">
+		UPDATE production_plan
+		<set>
+			<if test="planId != null">plan_id = #{planId},</if>
+			<if test="locCode != null">loc_code = #{locCode},</if>
+			<if test="plantLocation != null">plant_location = #{plantLocation},</if>
+			<if test="lineUuid != null">line_uuid = #{lineUuid},</if>
+			<if test="planDate != null">plan_date = #{planDate},</if>
+			<if test="productCode != null">product_code = #{productCode},</if>
+			<if test="productName != null">product_name = #{productName},</if>
+			<if test="priority != null">priority = #{priority},</if>
+			<if test="packType != null">pack_type = #{packType},</if>
+			<if test="sizeCode != null">size_code = #{sizeCode},</if>
+			<if test="unitsPerCase != null">units_per_case = #{unitsPerCase},</if>
+			<if test="purpose != null">purpose = #{purpose},</if>
+			<if test="volume != null">volume = #{volume},</if>
+			<if test="mrp != null">mrp = #{mrp},</if>
+			<if test="mrpBatch != null">mrp_batch = #{mrpBatch},</if>
+			<if test="productBatch != null">product_batch = #{productBatch},</if>
+			<if test="isCouponApply != null">is_coupon_apply = #{isCouponApply},</if>
+				<if test="labelPrint != null">label_print = #{labelPrint},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+			<if test="status != null">status = #{status},</if>
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+
+	<!--Delete: delete according to the primary key ID -->
+	<delete id="delete" parameterType="com.bpcl.dto.ProductionPlan">
+		DELETE FROM production_plan
+		WHERE uuid =#{uuid}
+	</delete>
+
+	<!-- Query (query based on primary key ID) -->
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.ProductionPlan">
+		SELECT * FROM production_plan
+		WHERE uuid =#{uuid}
+	</select>
+
+	<!-- Query (according to map query） -->
+	<select id="getInfoByMap"
+		resultType="com.bpcl.dto.ProductionPlan">
+		SELECT *
+		<include refid="sqlForList" />
+		limit 1
+	</select>
+
+	<!--Get a list of generic SQL -->
+	<sql id="sqlForList">
+		FROM production_plan
+		<where>
+			<if test="planId != null">and plan_id = #{planId}</if>
+			<if test="locCode != null">and loc_code = #{locCode}</if>
+			<if test="plantLocation != null">and plant_location = #{plantLocation}</if>
+			<if test="lineUuid != null">and line_uuid = #{lineUuid}</if>
+			<if test="planDate != null">and plan_date = #{planDate}</if>
+			<if test="productCode != null">and product_code = #{productCode}</if>
+			<if test="productName != null">and product_name = #{productName}</if>
+			<if test="priority != null">and priority = #{priority}</if>
+			<if test="packType != null">and pack_type = #{packType}</if>
+			<if test="sizeCode != null">and size_code = #{sizeCode}</if>
+			<if test="unitsPerCase != null">and units_per_case = #{unitsPerCase}</if>
+			<if test="purpose != null">and purpose = #{purpose}</if>
+			<if test="volume != null">and volume = #{volume}</if>
+			<if test="mrp != null">and mrp = #{mrp}</if>
+			<if test="mrpBatch != null">and mrp_batch = #{mrpBatch}</if>
+			<if test="productBatch != null">and product_batch = #{productBatch}</if>
+			<if test="isCouponApply != null">and is_coupon_apply = #{isCouponApply}</if>
+			<if test="labelPrint != null">and labelPrint = #{labelPrint}</if>
+			<if test="createTime != null">and create_time = #{createTime}</if>
+			<if test="status != null">and status = #{status}</if>
+		</where>
+	</sql>
+
+	<!-- statistics -->
+	<select id="count" resultType="int">
+		select count(*)
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- Obtainlist -->
+	<select id="query" resultType="com.bpcl.dto.ProductionPlan">
+		select *
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- Paging query -->
+	<select id="queryPage" resultType="com.bpcl.dto.ProductionPlan">
+		select *
+		<include refid="sqlForList" />
+	</select>
+
+	<update id="statusUpdatedByPlanId">
+		UPDATE production_plan SET
+		status=#{status} WHERE
+		plan_id=#{planId};
+	</update>
+
+</mapper>

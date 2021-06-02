@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.CouponInspectionMapper">
+
+	<insert id="insert"
+		parameterType="com.bpcl.dto.CouponInspection">
+		INSERT INTO coupon_inspection
+		(uuid,coupon_code,coupon_size,lot_code,plant_location,line_uuid,create_time,status)
+		VALUES
+		(#{uuid},#{couponCode},#{couponSize},#{lotCode},#{plantLocation},#{lineUuid},#{createTime},#{status})
+
+	</insert>
+
+	<!--Modification -->
+	<update id="update"
+		parameterType="com.bpcl.dto.CouponInspection">
+		UPDATE coupon_inspection
+		<set>
+			<if test="couponCode != null">coupon_code = #{couponCode},</if>
+			<if test="couponSize != null">coupon_size = #{couponSize},</if>
+			<if test="lotCode != null">lot_code = #{lotCode},</if>
+			<if test="plantLocation != null">plant_location = #{plantLocation},</if>
+			<if test="lineUuid != null">line_uuid = #{lineUuid},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+			<if test="status != null">status = #{status},</if>
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+
+	<!--Delete: delete according to the primary key ID -->
+	<delete id="delete"
+		parameterType="com.bpcl.dto.CouponInspection">
+		DELETE FROM coupon_inspection
+		WHERE uuid =#{uuid}
+	</delete>
+
+	<!-- Query (query based on primary key ID) -->
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.CouponInspection">
+		SELECT * FROM coupon_inspection
+		WHERE uuid =#{uuid}
+	</select>
+
+	<!-- Query (according to map query） -->
+	<select id="getInfoByMap"
+		resultType="com.bpcl.dto.CouponInspection">
+		SELECT *
+		<include refid="sqlForList" />
+		order by create_time limit 1
+	</select>
+
+	<!--Get a list of generic SQL -->
+	<sql id="sqlForList">
+		FROM coupon_inspection
+		<where>
+			<if test="couponCode != null">and coupon_code = #{couponCode}</if>
+			<if test="couponSize != null">and coupon_size = #{couponSize}</if>
+			<if test="lotCode != null">and lot_code = #{lotCode}</if>
+			<if test="plantLocation != null">and plant_location = #{plantLocation}</if>
+			<if test="lineUuid != null">and line_uuid = #{lineUuid}</if>
+			<if test="createTime != null">and create_time = #{createTime}</if>
+			<if test="status != null">and status = #{status}</if>
+		</where>
+	</sql>
+
+	<!-- statistics -->
+	<select id="count" resultType="int">
+		select count(*)
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- Obtainlist -->
+	<select id="query" resultType="com.bpcl.dto.CouponInspection">
+		select *
+		<include refid="sqlForList" />
+		order by create_time
+	</select>
+
+	<!-- Paging query -->
+	<select id="queryPage"
+		resultType="com.bpcl.dto.CouponInspection">
+		select *
+		<include refid="sqlForList" />
+		order by create_time
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO coupon_inspection
+		(uuid,coupon_code,coupon_size,lot_code,plant_location,line_uuid,create_time,status)
+		VALUES
+		<foreach collection="list" item="couponInspection"
+			index="index" separator=",">
+			(#{couponInspection.uuid},
+			#{couponInspection.couponCode},
+			#{couponInspection.couponSize},
+			#{couponInspection.lotCode},
+			#{couponInspection.plantLocation},
+			#{couponInspection.lineUuid},
+			#{couponInspection.createTime},
+			#{couponInspection.status})
+		</foreach>
+	</insert>
+
+	<update id="updateByCouponCode">
+		UPDATE coupon_inspection SET status=#{status} WHERE
+		coupon_code=#{couponCode}
+	</update>
+
+</mapper>

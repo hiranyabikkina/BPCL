@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.PailsProductionScannerMapper">
+
+	<insert id="insert"
+		parameterType="com.bpcl.dto.PailsProductionScanner">
+		INSERT INTO
+		pails_production_scanner
+		(bottle_code,coupon_code,bottle_code_status,coupon_code_status)
+		VALUES
+		(#{bottleCode},#{couponCode},#{bottleCodeStatus},#{couponCodeStatus})
+
+	</insert>
+
+	<!--Modification -->
+	<update id="update"
+		parameterType="com.bpcl.dto.PailsProductionScanner">
+		UPDATE pails_production_scanner
+		<set>
+			<if test="bottleCode != null">bottle_code = #{bottleCode},</if>
+			<if test="couponCode != null">coupon_code = #{couponCode},</if>
+			<if test="bottleCodeStatus != null">bottle_code_status = #{bottleCodeStatus},</if>
+			<if test="couponCodeStatus != null">coupon_code_status = #{couponCodeStatus},</if>
+		
+		</set>
+	</update>
+
+	<!--Delete: delete according to the primary key ID -->
+	<delete id="delete"
+		parameterType="com.bpcl.dto.PailsProductionScanner">
+		DELETE FROM
+		pails_production_scanner
+	</delete>
+
+	<!-- Query (query based on primary key ID) -->
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.PailsProductionScanner">
+		SELECT * FROM pails_production_scanner limit 1
+	</select>
+
+	<!-- Query (according to map query） -->
+	<select id="getInfoByMap"
+		resultType="com.bpcl.dto.PailsProductionScanner">
+		SELECT *
+		<include refid="sqlForList" />
+		limit 1
+	</select>
+
+	<!--Get a list of generic SQL -->
+	<sql id="sqlForList">
+		FROM pails_production_scanner
+		<where>
+			<if test="bottleCode != null">and bottle_code = #{bottleCode}</if>
+			<if test="couponCode != null">and coupon_code = #{couponCode}</if>
+			<if test="bottleCodeStatus != null">and bottle_code_status = #{bottleCodeStatus}</if>
+			<if test="couponCodeStatus != null">and coupon_code_status = #{couponCodeStatus}</if>
+			
+		</where>
+	</sql>
+
+	<!-- statistics -->
+	<select id="count" resultType="int">
+		select count(*)
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- Obtainlist -->
+	<select id="query"
+		resultType="com.bpcl.dto.PailsProductionScanner">
+		select *
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- Paging query -->
+	<select id="queryPage"
+		resultType="com.bpcl.dto.PailsProductionScanner">
+		select *
+		<include refid="sqlForList" />
+	</select>
+
+
+</mapper>

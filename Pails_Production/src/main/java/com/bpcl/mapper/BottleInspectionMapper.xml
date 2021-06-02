@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bpcl.mapper.BottleInspectionMapper">
+
+	<insert id="insert"
+		parameterType="com.bpcl.dto.BottleInspection">
+		INSERT INTO bottle_inspection
+		(uuid,bottle_code,plant_location,line_uuid,created_time,status)
+		VALUES
+		(#{uuid},#{bottleCode},#{plantLocation},#{lineUuid},#{createdTime},#{status})
+
+	</insert>
+
+	<!--Modification -->
+	<update id="update"
+		parameterType="com.bpcl.dto.BottleInspection">
+		UPDATE bottle_inspection
+		<set>
+			<if test="bottleCode != null">bottle_code = #{bottleCode},</if>
+			<if test="plantLocation != null">plant_location = #{plantLocation},</if>
+			<if test="lineUuid != null">line_uuid = #{lineUuid},</if>
+			<if test="createdTime != null">created_time = #{createdTime},</if>
+			<if test="status != null">status = #{status},</if>
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+
+	<!--Delete: delete according to the primary key ID -->
+	<delete id="delete"
+		parameterType="com.bpcl.dto.BottleInspection">
+		DELETE FROM bottle_inspection
+		WHERE uuid =#{uuid}
+	</delete>
+
+	<!-- Query (query based on primary key ID) -->
+	<select id="getInfoByUuid"
+		resultType="com.bpcl.dto.BottleInspection">
+		SELECT * FROM
+		bottle_inspection WHERE uuid =#{uuid}
+	</select>
+
+	<!-- Query (according to map query） -->
+	<select id="getInfoByMap"
+		resultType="com.bpcl.dto.BottleInspection">
+		SELECT *
+		<include refid="sqlForList" />
+		limit 1
+	</select>
+
+	<!--Get a list of generic SQL -->
+	<sql id="sqlForList">
+		FROM bottle_inspection
+		<where>
+			<if test="bottleCode != null">and bottle_code = #{bottleCode}</if>
+			<if test="plantLocation != null">and plant_location = #{plantLocation}</if>
+			<if test="lineUuid != null">and line_uuid = #{lineUuid}</if>
+			<if test="createdTime != null">and created_time = #{createdTime}</if>
+			<if test="status != null">and status = #{status}</if>
+		</where>
+	</sql>
+
+	<!-- statistics -->
+	<select id="count" resultType="int">
+		select count(*)
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- Obtainlist -->
+	<select id="query" resultType="com.bpcl.dto.BottleInspection">
+		select *
+		<include refid="sqlForList" />
+	</select>
+
+	<!-- Paging query -->
+	<select id="queryPage"
+		resultType="com.bpcl.dto.BottleInspection">
+		select *
+		<include refid="sqlForList" />
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO bottle_inspection
+		(uuid,bottle_code,plant_location,line_uuid,created_time,status)
+		VALUES
+		<foreach collection="list" item="bottleInspection"
+			index="index" separator=",">
+			(#{bottleInspection.uuid},
+			#{bottleInspection.bottleCode},
+			#{bottleInspection.plantLocation},
+			#{bottleInspection.lineUuid},
+			#{bottleInspection.createTime},
+			#{bottleInspection.status})
+		</foreach>
+	</insert>
+
+	<update id="updateByBottleCode">
+		UPDATE bottle_inspection SET status=#{status} WHERE
+		bottle_code=#{bottleCode}
+	</update>
+
+</mapper>
